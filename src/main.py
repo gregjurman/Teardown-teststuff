@@ -40,6 +40,6 @@ if __name__ == '__main__':
     # Fiducial Testing
     fid = td.detectors.Fiducial(y=0,h=12, parent=r1, box_model=td.bounding.HorizontalRect)
     
-    print fid.__class__.__name__
+    print fid.acquire()
     
     print "Done"

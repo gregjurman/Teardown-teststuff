@@ -3,40 +3,64 @@ Created on Apr 6, 2011
 
 @author: PCADMIN
 '''
-import teardown.core.bounding as bounding
-import teardown.settings as settings
-class InspectionArea(bounding.BoundingRect):
-    def __init__(self, *args, **kwargs):
-        bounding.BoundingRect.__init__(self, *args, **kwargs)
+
+from teardown import *
+
+
 
 class Fiducial(object):
     """
-    This is the base Fiducial detector. 
+    This is the base Fiducial detector. Subclass this to the engine and specialized
+    Fiducials 
     
     TODO: Depending on how generic this gets it maybe moved to a
     more generalized class.
-    
-    FIX: The  isnt setting up properly. This needs to be fixed!!!!
     """
     def __init__(self, bounding_rect=None, tolerance=None, *args, **kwargs):
+        clsname = "%s.%sFiducial" % (settings.CAPTURE_ENGINE, settings.CAPTURE_ENGINE)
+        if hasattr(capture, clsname):
+            cls = getattr(capture, clsname)
+        else:
+            cls = None
+            raise capture.CaptureEngineError("Capture Engine '%s' does not declared." % settings.CAPTURE_ENGINE)
+        
+        self.__class__ = cls
         self.rect = bounding_rect
         self.tolerance = tolerance
     
     def acquire(self, img):
         """
-          Acquires the image matrix inside the area for processing.
+        Acquires the image matrix inside the area for processing.
             
-          This expects the engine name is prefixed (Ex. 'engine_acquire')
+        This expects the engine name to be prefixed (Ex. 'engine_acquire')
         """
-        if callable(self, settings.CAPTURE_ENGINE+"_acquire"): # fix this ugly
-            acqcall = getattr(self, settings.CAPTURE_ENGINE+"_acquire")
-            return acqcall(img)
+        if callable(self, "%s_acquire" % settings.CAPTURE_ENGINE):
+            acquire_call = getattr(self, "%s_acquire" % settings.CAPTURE_ENGINE)
+            return acquire_call(img)
         else:
             raise NotImplementedError()
         
     
     def detect(self):
-        pass
+        """
+        Detects the Fiducial feature and records location, rotation info
+            
+        This expects the engine name to be prefixed (Ex. 'engine_detect')
+        """
+        if callable(self, "%s_detect" % settings.CAPTURE_ENGINE):
+            detect_call = getattr(self, "%s_detect" % settings.CAPTURE_ENGINE)
+            return detect_call()
+        else:
+            raise NotImplementedError()
     
     def classify(self):
-        pass
+        """
+        Classifies the Fiducial and generate a confidence index
+            
+        This expects the engine name to be prefixed (Ex. 'engine_classify')
+        """
+        if callable(self, "%s_classify" % settings.CAPTURE_ENGINE):
+            classify_call = getattr(self, "%s_classify" % settings.CAPTURE_ENGINE)
+            return classify_call()
+        else:
+            raise NotImplementedError()
