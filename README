@@ -1,0 +1,41 @@
+Teardown (the data wall)
+
+Teardown is designed to take apart tables in PDFs or images that can not
+be properly OCRed without the OCR software knowing where to look. It is
+meant to act as an itermediary between raw data-sets and a Database or CSV.
+
+
+Capture Engine:
+
+ 		The capture engine's job is to locate where the data is in relation 
+ 	to the page/image. By defining features (fiducials), the capture engine 
+ 	can reposition and rotate the page to make it easier for the scanning 
+ 	engine to process data to text.
+	
+	
+Scanning Engine:
+
+		The scanning engine OCRs the text that has been located by the 
+	capture engine. This is basic OCR, nothing special here.
+	
+	
+Job Engine:
+
+		This engine farms out the work to be done by the scanning engine 
+	either locally on one or multiple threads, or farms it out to a compute
+	cluster or the cloud.
+
+
+Planned Support for:
+
+	- Capture Engines:
+		- OpenCV 2.2
+	
+	- Scanning Engines:
+		- OpenCV 2.2 (Haar Classifier)
+		- Terrasect
+	
+	- Job Engines:
+		- Local (single and multi-threaded)
+		- Amazon S3/AWS Farming
+		- AQMP/XMPP Job Controller
