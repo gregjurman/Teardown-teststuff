@@ -90,7 +90,10 @@ class LinearLineFiducial(LineFiducial):
         slope, offset = self._get_slope_offset(point_cloud)
         
         theta = math.atan(slope)
-        #Finish this
+        length = math.sqrt(math.pow(slope, 2) + 1)*(cloud_rect[1][0] - cloud_rect[0][0])
+        print length
+        # Ok do some tolerance math, so we can compare with what the user says
+        #  it should look like
         
     def _cloud_boundary(self, point_cloud):
         xl = []
@@ -126,4 +129,4 @@ class LinearLineFiducial(LineFiducial):
         a=(-sum_x*sum_xy+sum_xx*sum_y)/(n*sum_xx-sum_x*sum_x)
         b=(-sum_x*sum_y+n*sum_xy)/(n*sum_xx-sum_x*sum_x)
         
-        return (a, b)
+        return (b, a)
