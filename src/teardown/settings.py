@@ -5,4 +5,4 @@ Created on Apr 6, 2011
 '''
 CAPTURE_ENGINE="opencv"
 
-OPENCV_INTERACTIVE=True
+OPENCV_INTERACTIVE=False

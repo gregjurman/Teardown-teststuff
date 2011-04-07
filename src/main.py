@@ -42,12 +42,14 @@ if __name__ == '__main__':
     # Fiducial Testing
     capt = td.capture.CaptureHandler()
     capt.load_image("testpage.png")
-    fid = capt.detectors.LineFiducial(bounding_rect=rr2,
-                                      tolerance=80,
-                                      min_length=50, max_gap=50)
+    fid = capt.detectors.LinearLineFiducial(bounding_rect=rr2,
+                                      tolerance=80, deviation=0.2,
+                                      min_length=50, max_gap=50,
+                                      approx_angle=0, approx_length=500)
     
     fid.acquire(capt.image)
     fid.detect()
+    fid.classify()
     
     if td.settings.OPENCV_INTERACTIVE:
         dump = raw_input() #hold on, i need to inspect the window
